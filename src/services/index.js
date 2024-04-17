@@ -1,13 +1,11 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
+import useRedirectToLogin from "../layout/useRedirectToLogin";
 
 const token=localStorage.getItem("token");
 
-const redirectToLogin = () => {
-   // const navigate=useNavigate();
-  //  navigate("/login");
-};
+
 const Config = axios.create({
     baseURL: `http://localhost:8080/`,
 
@@ -22,7 +20,7 @@ Config.interceptors.response.use(
     (error)=>{
         console.log(error?.response?.status,"error");
         if(error?.response?.status==401){
-            //redirectToLogin();
+            useRedirectToLogin();
         }
        
         const updatedMessage = error?.response?.data?.message;

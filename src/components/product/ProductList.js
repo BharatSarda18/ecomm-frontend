@@ -1,20 +1,14 @@
-import React ,{ Fragment, useState,useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  StarIcon,
-} from '@heroicons/react/20/solid';
+import { StarIcon, } from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
 import { Grid } from 'react-loader-spinner';
 import { ITEMS_PER_PAGE } from '../../data/constants';
 import Pagination from '../../layout/Pagination';
-import { fetchProductByIdAsync ,fetchProductsByFiltersAsync,fetchBrandsAsync,fetchCategoriesAsync} from '../../redux/productSlice';
-
-
+import { fetchProductsByFiltersAsync, fetchBrandsAsync, fetchCategoriesAsync } from '../../redux/productSlice';
 
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
@@ -22,14 +16,10 @@ const sortOptions = [
   { name: 'Price: High to Low', sort: 'discountPrice', order: 'desc', current: false },
 ];
 
-
-
-
 function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ')
 };
 
-  
 export default function ProductList() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
@@ -99,8 +89,9 @@ export default function ProductList() {
     dispatch(fetchBrandsAsync());
     dispatch(fetchCategoriesAsync());
   }, []);
-    return (
-      <div className="bg-white">
+
+  return (
+    <div className="bg-white">
       <div>
         <MobileFilter
           handleFilter={handleFilter}
@@ -110,7 +101,7 @@ export default function ProductList() {
         ></MobileFilter>
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
               All Products
             </h1>
@@ -207,7 +198,7 @@ export default function ProductList() {
         </main>
       </div>
     </div>
-    )
+  )
 };
 
 
@@ -357,11 +348,11 @@ function DesktopFilter({ handleFilter, filters }) {
               </h3>
               <Disclosure.Panel className="pt-6">
                 <div className="space-y-4">
-                  
+
                   {section?.options?.map((option, optionIdx) => (
-                    
+
                     <div key={option.value} className="flex items-center">
-                      {console.log(section.options,"sectionbharat")}
+                      {console.log(section.options, "sectionbharat")}
                       <input
                         id={`filter-${section.id}-${optionIdx}`}
                         name={`${section.id}[]`}
@@ -377,7 +368,7 @@ function DesktopFilter({ handleFilter, filters }) {
                       >
                         {option.label}
                       </label>
-                      {console.log(option.label,"{option.label}")}
+                      {console.log(option.label, "{option.label}")}
                     </div>
                   ))}
                 </div>
@@ -408,7 +399,7 @@ function ProductGrid({ products, status }) {
             />
           ) : null}
           {products.map((product) => (
-            <Link to={`/product-detail/${product.id}`} key={product.id}>
+            <Link to={`/dashboard/product-detail/${product.id}`} key={product.id}>
               <div className="group relative border-solid border-2 p-2 border-gray-200">
                 <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                   <img
@@ -430,13 +421,25 @@ function ProductGrid({ products, status }) {
                       <span className=" align-bottom">{product.rating}</span>
                     </p>
                   </div>
-                  <div>
-                    <p className="text-sm block font-medium text-gray-900">
+                  <div className=' flex-col'>
+                    {/* <p className="text-sm block font-medium text-gray-900">
                       ${product.discountPrice}
-                    </p>
-                    <p className="text-sm block line-through font-medium text-gray-400">
+                    </p> */}
+                     <p className="text-sm block line-through font-medium text-gray-400">
                       ${product.price}
                     </p>
+                    <>
+                      {(product.discountPrice) ? (
+                        <p className="text-sm block font-medium text-gray-900">
+                          ${product.discountPrice}{" "}
+                        </p>
+                      ) : (
+                        <p className="text-sm block font-medium text-gray-900">
+                          ${product.price - (product.price * product.discountPercentage / 100)}{" "}
+                        </p>
+                      )}
+                    </>
+                   
                   </div>
                 </div>
                 {product.deleted && (
@@ -454,6 +457,6 @@ function ProductGrid({ products, status }) {
           ))}
         </div>
       </div>
-    </div>
+    </div >
   );
 }

@@ -1,68 +1,58 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteItemFromCartAsync, selectCartLoaded, selectCartStatus, selectItems, updateCartAsync, } from '../../redux/cartSlice';
+import { deleteItemFromCartAsync, updateCartAsync, } from '../../redux/cartSlice';
 import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { Grid } from 'react-loader-spinner';
 import Modal from '../resuablecomponent/Modal';
 
-const products = [
-    {
-        id: 1,
-        name: 'Throwback Hip Bag',
-        href: '#',
-        color: 'Salmon',
-        price: '$90.00',
-        quantity: 1,
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-01.jpg',
-        imageAlt: 'Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt.',
-    },
-    {
-        id: 2,
-        name: 'Medium Stuff Satchel',
-        href: '#',
-        color: 'Blue',
-        price: '$32.00',
-        quantity: 1,
-        imageSrc: 'https://tailwindui.com/img/ecommerce-images/shopping-cart-page-04-product-02.jpg',
-        imageAlt:
-            'Front of satchel with blue canvas body, black straps and handle, drawstring top, and front zipper pouch.',
-    },
-    // More products...
-]
-
 export default function Cart() {
 
-    const items = useSelector((state) => state.cart.items);
-    const status = useSelector((state) => state.cart.status);
-    const cartLoaded = useSelector((state) => state.cart.cartLoaded);
+  const items = useSelector((state) => state.cart.items);
+  const status = useSelector((state) => state.cart.status);
+  const cartLoaded = useSelector((state) => state.cart.cartLoaded);
 
-    const [openModal, setOpenModal] = useState(null);
+  const [openModal, setOpenModal] = useState(null);
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const totalAmount = items.reduce(
-        (amount, item) => item.product.discountPrice * item.quantity + amount,
-        0
-    );
+  // const totalAmount = items.reduce(
+  //   (amount, item) => item.product.discountPrice * item.quantity + amount,
+  //   0
+  // );
 
-    const totalItems = items.reduce((total, item) => item.quantity + total, 0);
+  let totalAmount = items.reduce((amount, item) => {
+    // Check if discount price exists, otherwise calculate discounted price
+    const price = item.product.discountPrice ? item.product.discountPrice : (item.product.price - (item.product.price * item.product.discountPercentage / 100));
+    
+    // Calculate subtotal for this item
+    const subtotal = price * item.quantity;
+  
+    // Add subtotal to the total amount
+    return amount + subtotal;
+  }, 0);
 
-    const handleQuantity = (e, item) => {
-      console.log(item,"itemupdate");
-        dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
-    };
+  totalAmount=Number(totalAmount.toFixed(2));
 
-    const handleRemove = (e, id) => {
-      console.log("removeid",id)
-        dispatch(deleteItemFromCartAsync(id));
-    };
 
-    return (
-      <>
-      {!items.length && cartLoaded && <Navigate to="/" replace={true}></Navigate>}
+  
+
+  const totalItems = items.reduce((total, item) => item.quantity + total, 0);
+
+  const handleQuantity = (e, item) => {
+    let newItem = { ...item };
+    newItem.quantity = +e.target.value;
+    dispatch(updateCartAsync(newItem));
+  };
+
+  const handleRemove = (e, id) => {
+    console.log(id, "=====<")
+    dispatch(deleteItemFromCartAsync(id));
+  };
+
+  return (
+    <>
+      {!items.length && cartLoaded && <Navigate to="/dashboard" replace={true}></Navigate>}
 
       <div>
         <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -100,7 +90,12 @@ export default function Cart() {
                           <h3>
                             <a href={item.product.id}>{item.product.title}</a>
                           </h3>
-                          <p className="ml-4">${item.product.discountPrice}</p>
+                          {item.product.discountPrice ?
+                            <p className="ml-4">${item.product.discountPrice}</p> :
+                            <p className="ml-4">
+                              ${item.product.price - (item.product.price * item.product.discountPercentage / 100)}{" "}
+                            </p>
+                          }
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
                           {item.product.brand}
@@ -132,12 +127,12 @@ export default function Cart() {
                             message="Are you sure you want to delete this Cart item ?"
                             dangerOption="Delete"
                             cancelOption="Cancel"
-                            dangerAction={(e) => handleRemove(e, item.id)}
-                            cancelAction={()=>setOpenModal(null)}
+                            dangerAction={(e) => handleRemove(e, item.product.id)}
+                            cancelAction={() => setOpenModal(null)}
                             showModal={openModal === item.id}
                           ></Modal>
                           <button
-                            onClick={e=>{setOpenModal(item.id)}}
+                            onClick={e => { setOpenModal(item.id) }}
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                           >
@@ -166,7 +161,7 @@ export default function Cart() {
             </p>
             <div className="mt-6">
               <Link
-                to="/checkout"
+                to="/dashboard/checkout"
                 className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
               >
                 Checkout
@@ -174,8 +169,8 @@ export default function Cart() {
             </div>
             <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
               <p>
-                or
-                <Link to="/">
+                or{" "}
+                <Link to="/dashboard">
                   <button
                     type="button"
                     className="font-medium text-indigo-600 hover:text-indigo-500"
@@ -190,5 +185,5 @@ export default function Cart() {
         </div>
       </div>
     </>
-    )
+  )
 };

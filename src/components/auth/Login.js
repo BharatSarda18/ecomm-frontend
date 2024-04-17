@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { loginUserAsync } from '../../redux/authSlice';
+import { checkAuth } from '../../services/authService';
+import toast from 'react-hot-toast';
 
 export default function Login() {
 
@@ -16,8 +18,6 @@ export default function Login() {
         password: Yup.string().required('Password is required')
     });
 
-
-
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -25,12 +25,22 @@ export default function Login() {
         },
         validationSchema,
         onSubmit: async (values) => {
-            await dispatch(loginUserAsync(values))
-            navigate("/");
+            const response = await dispatch(loginUserAsync(values));
+
+            if (response?.payload?.statusCode == 201) {
+                //  await dispatch(checkAuth());
+                await navigate("/dashboard/");
+            }else{
+                toast.error("Wrong user or password ");
+            }
+
         }
     });
 
-   
+ 
+
+
+
     return (
         <div className="flex min-h-full  bg-white flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -39,10 +49,9 @@ export default function Login() {
                 </h2>
             </div>
 
-          
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form noValidate className="space-y-6" onSubmit={formik.handleSubmit}>
-                    <div>
+                    <>
                         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                             Email address
                         </label>
@@ -62,18 +71,13 @@ export default function Login() {
                                 <p className="mt-2 text-sm text-red-500">{formik.errors.email}</p>
                             ) : null}
                         </div>
-                    </div>
+                    </>
 
-                    <div>
+                    <>
                         <div className="flex items-center justify-between">
                             <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                                 Password
                             </label>
-                            <div className="text-sm">
-                                <Link to={"/forgot-password"} className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                    Forgot password?
-                                </Link>
-                            </div>
                         </div>
                         <div className="mt-2">
                             <input
@@ -91,16 +95,15 @@ export default function Login() {
                                 <p className="mt-2 text-sm text-red-500">{formik.errors.password}</p>
                             ) : null}
                         </div>
-                    </div>
+                    </>
 
-                    <div>
+                    
                         <button
                             type="submit"
                             className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                         >
                             Log in
                         </button>
-                    </div>
                 </form>
 
                 <p className="mt-10 text-center text-sm text-gray-500">

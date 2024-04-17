@@ -6,15 +6,15 @@ import { useSelector } from 'react-redux';
 
 
 const navigation = [
-  { name: 'Products', link: '/', user: true },
-  { name: 'Products', link: '/admin', admin: true },
-  { name: 'Orders', link: '/admin/orders', admin: true },
+  { name: 'Products', link: '/dashboard/', user: true },
+  { name: 'Products', link: '/dashboard/admin', admin: true },
+  { name: 'Orders', link: '/dashboard/admin/orders', admin: true },
 
 ];
 const userNavigation = [
-  { name: 'My Profile', link: '/profile' },
-  { name: 'My Orders', link: '/my-orders' },
-  { name: 'Sign out', link: '/logout' },
+  { name: 'My Profile', link: '/dashboard/profile' },
+  { name: 'My Orders', link: '/dashboard/my-orders' },
+  { name: 'Sign out', link: '/login' },
 ];
 
 function classNames(...classes) {
@@ -26,15 +26,15 @@ export default function NavBar({ children }) {
   const items = useSelector((state) => state.cart.items);
   const userInfo = useSelector((state) => state.user.userInfo);
 
-  const clickonNavHandler=(name)=>{
-    if(name=='Sign out'){
+  const clickonNavHandler = (name) => {
+    if (name == 'Sign out') {
       localStorage.clear();
     }
   }
 
-    return (
-      <>
-      {userInfo &&<div className="min-h-full">
+  return (
+    <>
+      {userInfo && <div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
@@ -42,13 +42,8 @@ export default function NavBar({ children }) {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <Link to="/">
-                        <img
-                          className="h-8 w-8"
-                          src="/ecommerce.png"
-                        
-                          alt="Your Company"
-                        />
+                      <Link to="/dashboard" className='bg-gray-900 text-white'>
+                        Bharat's Ecommerce
                       </Link>
                     </div>
                     <div className="hidden md:block">
@@ -75,18 +70,20 @@ export default function NavBar({ children }) {
                   </div>
                   <div className="hidden md:block">
                     <div className="ml-4 flex items-center md:ml-6">
-                      <Link to="/cart">
-                        <button
-                          type="button"
-                          className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                        >
-                          <span className="sr-only">View notifications</span>
-                          <ShoppingCartIcon
-                            className="h-6 w-6"
-                            aria-hidden="true"
-                          />
-                        </button>
-                      </Link>
+                      {items.length > 0 &&
+                        <Link to="/dashboard/cart">
+                          <button
+                            type="button"
+                            className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                          >
+                            <span className="sr-only">View notifications</span>
+                            <ShoppingCartIcon
+                              className="h-6 w-6"
+                              aria-hidden="true"
+                            />
+                          </button>
+                        </Link>
+                      }
                       {items.length > 0 && (
                         <span className="inline-flex items-center rounded-md mb-7 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                           {items.length}
@@ -120,7 +117,7 @@ export default function NavBar({ children }) {
                                 {({ active }) => (
                                   <Link
                                     to={item.link}
-                                    onClick={()=>clickonNavHandler(item.name)}
+                                    onClick={() => clickonNavHandler(item.name)}
                                     className={classNames(
                                       active ? 'bg-gray-100' : '',
                                       'block px-4 py-2 text-sm text-gray-700'
@@ -159,20 +156,24 @@ export default function NavBar({ children }) {
               <Disclosure.Panel className="md:hidden">
                 <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
                   {navigation.map((item) => (
-                    <Disclosure.Button
-                      key={item.name}
-                      as="a"
-                      href={item.href}
-                      className={classNames(
-                        item.current
-                          ? 'bg-gray-900 text-white'
-                          : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                        'block rounded-md px-3 py-2 text-base font-medium'
-                      )}
-                      aria-current={item.current ? 'page' : undefined}
-                    >
-                      {item.name}
-                    </Disclosure.Button>
+                    item[userInfo.role] ?
+
+                      <Disclosure.Button
+                        key={item.name}
+                        as="a"
+                        href={item.href}
+                        className={classNames(
+                          item.current
+                            ? 'bg-gray-900 text-white'
+                            : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                          'block rounded-md px-3 py-2 text-base font-medium'
+                        )}
+                        aria-current={item.current ? 'page' : undefined}
+                      >
+                        <Link to={item.link}>
+                          {item.name}
+                        </Link>
+                      </Disclosure.Button> : null
                   ))}
                 </div>
                 <div className="border-t border-gray-700 pb-3 pt-4">
@@ -193,17 +194,19 @@ export default function NavBar({ children }) {
                         {userInfo.email}
                       </div>
                     </div>
-                    <Link to="/cart">
-                      <button
-                        type="button"
-                        className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                      >
-                        <ShoppingCartIcon
-                          className="h-6 w-6"
-                          aria-hidden="true"
-                        />
-                      </button>
-                    </Link>
+                    {items.length > 0 &&
+                      <Link to="/dashboard/cart">
+                        <button
+                          type="button"
+                          className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                        >
+                          <ShoppingCartIcon
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </Link>
+                    }
                     {items.length > 0 && (
                       <span className="inline-flex items-center rounded-md bg-red-50 mb-7 -ml-3 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                         {items.length}
@@ -214,12 +217,14 @@ export default function NavBar({ children }) {
                     {userNavigation.map((item) => (
                       <Disclosure.Button
                         key={item.name}
-                        as="a"
-                        href={item.href}
-                      
+                        onClick={() => clickonNavHandler(item.name)}
+                        //  as="a"
+                        //  href={item.href}
                         className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                       >
-                        {item.name}
+                        <Link to={item.link}>
+                          {item.name}
+                        </Link>
                       </Disclosure.Button>
                     ))}
                   </div>
@@ -243,5 +248,5 @@ export default function NavBar({ children }) {
         </main>
       </div>}
     </>
-    )
+  )
 };

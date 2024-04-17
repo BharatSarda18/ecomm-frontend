@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {fetchLoggedInUserOrderAsync} from '../../redux/userSlice';
+import { fetchLoggedInUserOrderAsync } from '../../redux/userSlice';
 import { Grid } from 'react-loader-spinner';
 
 
 export default function UserOrders() {
   const dispatch = useDispatch();
-   const orders = useSelector((state)=>state?.user?.userInfo?.orders)||[];
-  //const orders = useSelector((state)=>state?.order?.orders)||[];
+  
+  const orders = useSelector((state) => state?.user?.userInfo?.orders) || [];
 
-  console.log(orders,"ordersmap");
   const status = useSelector((state) => state.user.status);
 
   useEffect(() => {
@@ -17,7 +16,7 @@ export default function UserOrders() {
   }, [dispatch]);
 
   return (
-   <div>
+    <div>
       {orders && orders.map((order) => (
         <div key={order.id}>
           <div>
@@ -112,7 +111,7 @@ export default function UserOrders() {
           </div>
         </div>
       ))}
-       {status === 'loading' ? (
+      {status === 'loading' ? (
         <Grid
           height="80"
           width="80"

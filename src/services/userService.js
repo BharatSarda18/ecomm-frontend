@@ -9,6 +9,6 @@ export const fetchLoggedInUser = async () => {
 };
 
 export const updateUser = async (update) => {
-    return Config.patch(`/users/${update.id}`,update);
+    return Config.patch(`/users/${update._id}`,update);
 };
 

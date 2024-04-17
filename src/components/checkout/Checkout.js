@@ -117,12 +117,12 @@ export default function Checkout() {
         {/* {!items.length && <Navigate to="/" replace={true}></Navigate>} */}
         {currentOrder && currentOrder.paymentMethod === 'cash' && (
           <Navigate
-            to={`/order-success/${currentOrder.id}`}
+            to={`/dashboard/order-success/${currentOrder.id}`}
             replace={true}
           ></Navigate>
         )}
         {currentOrder && currentOrder.paymentMethod === 'card' && (
-          <Navigate to={`/stripe-checkout/`} replace={true}></Navigate>
+          <Navigate to={`/dashboard/stripe-checkout/`} replace={true}></Navigate>
         )}
   
         {status === 'loading' ? (

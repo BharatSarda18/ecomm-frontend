@@ -4,28 +4,30 @@ import { fetchLoggedInUser,fetchLoggedInUserOrders ,updateUser} from "../service
 export const fetchLoggedInUserOrderAsync = createAsyncThunk(
   'user/fetchLoggedInUserOrders',
   async () => {
-    const response = await fetchLoggedInUserOrders();
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+    try {
+      const response = await fetchLoggedInUserOrders();
+      return response.data;
+    } catch (error) {}
   }
 );
 
 export const fetchLoggedInUserAsync = createAsyncThunk(
   'user/fetchLoggedInUser',
   async () => {
-    const response = await fetchLoggedInUser();
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+    try {
+      const response = await fetchLoggedInUser();
+      return response.data;
+    } catch (error) {}
   }
 );
 
 export const updateUserAsync = createAsyncThunk(
   'user/updateUser',
   async (update) => {
-    // this is name mistake
-    const response = await updateUser(update);
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
+    try {
+      const response = await updateUser(update);
+      return response?.data;
+    } catch (error) {}
   }
 );
 
@@ -36,7 +38,11 @@ export const userSlice = createSlice({
     status: 'idle',
     userInfo: null, 
   },
-  reducers: { },
+  reducers: {
+    setUserInfo:(state,action)=>{
+      state.userInfo=action.payload;
+    }
+   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchLoggedInUserOrderAsync.pending, (state) => {
@@ -44,26 +50,30 @@ export const userSlice = createSlice({
       })
       .addCase(fetchLoggedInUserOrderAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.userInfo.orders = action.payload.data;
-
+        if(action?.payload?.statusCode==200){
+          state.userInfo.orders = action?.payload?.data||[];
+        }
       })
       .addCase(updateUserAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(updateUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        // earlier there was loggedInUser variable in other slice
-        state.userInfo = action.payload.data;
+        if(action?.payload?.statusCode==200){
+          state.userInfo = action?.payload?.data||{};
+        }
       })
       .addCase(fetchLoggedInUserAsync.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchLoggedInUserAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        // this info can be different or more from logged-in User info
-        state.userInfo = action.payload.data;
+        if(action?.payload?.statusCode==200){
+          state.userInfo = action?.payload?.data||{};
+        }
       });
    }
 });
 
+export const {setUserInfo}=userSlice.actions;
 export default userSlice.reducer;

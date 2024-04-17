@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
@@ -17,6 +17,8 @@ export default function SignUp() {
 
     const dispatch = useDispatch();
 
+    const navigate = useNavigate();
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -24,16 +26,26 @@ export default function SignUp() {
             confirmpassword: ''
         },
         validationSchema,
-        onSubmit: (values) => {
-            dispatch(
+        onSubmit: async(values) => {
+          const response=await dispatch(
                 createUserAsync({
                   email: values.email,
                   password: values.password,
                   role:'user'
                 })
               );
+
+            if (response?.payload?.statusCode == 201) {
+                //  await dispatch(checkAuth());
+                await navigate("/dashboard/");
+            }
         },
-    })
+    });
+
+    useEffect(() => {
+        localStorage.clear();
+    }, [])
+    
     return (
         <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">

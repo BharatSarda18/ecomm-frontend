@@ -182,7 +182,7 @@ export default function AdminProductList() {
               <div className="lg:col-span-3">
                 <div>
                   <Link
-                    to="/admin/product-form"
+                    to="/dashboard/admin/product-form"
                     className="rounded-md mx-10 my-5 bg-green-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
                     Add New Product
@@ -466,7 +466,7 @@ function ProductGrid({ products }) {
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           {products.map((product) => (
             <div key={product.id}>
-              <Link to={`/product-detail/${product.id}`} >
+              <Link to={`/dashboard/product-detail/${product.id}`} >
                 <div className="group relative border-solid border-2 p-2 border-gray-200">
                   <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
                     <img
@@ -515,7 +515,7 @@ function ProductGrid({ products }) {
               </Link>
               <div className="mt-5">
                 <Link
-                  to={`/admin/product-form/edit/${product.id}`}
+                  to={`/dashboard/admin/product-form/edit/${product.id}`}
                   className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Edit Product
