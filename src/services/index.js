@@ -7,8 +7,8 @@ const token=localStorage.getItem("token");
 
 
 const Config = axios.create({
-    baseURL: `http://localhost:8080/`,
-
+    
+    baseURL:process.env.REACT_APP_BASE_URL,
     headers: {
         Authorization: `Bearer ${token}`,
     },
