@@ -23,7 +23,7 @@ export default function Cart() {
 
   let totalAmount = items.reduce((amount, item) => {
     // Check if discount price exists, otherwise calculate discounted price
-    const price = item.product.discountPrice ? item.product.discountPrice : (item.product.price - (item.product.price * item.product.discountPercentage / 100));
+    const price = item?.product?.discountPrice ? item?.product?.discountPrice : (item?.product?.price - (item?.product?.price * item?.product?.discountPercentage / 100));
     
     // Calculate subtotal for this item
     const subtotal = price * item.quantity;

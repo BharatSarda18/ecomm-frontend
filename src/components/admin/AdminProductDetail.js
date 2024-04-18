@@ -1,12 +1,12 @@
 import React ,{useState,useEffect }from 'react';
-import { useAlert } from 'react-alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Grid } from 'react-loader-spinner';
 import { RadioGroup } from '@headlessui/react';
 import { StarIcon } from '@heroicons/react/20/solid';
-import {fetchProductByIdAsync,selectProductById} from '../../redux/productSlice';
+import {fetchProductByIdAsync} from '../../redux/productSlice';
 import { addToCartAsyncAdmin } from '../../redux/cartSlice';
+import toast from 'react-hot-toast';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -18,7 +18,7 @@ export default function AdminProductDetail() {
   const product = useSelector((state) => state.product.selectedProduct);
   const dispatch = useDispatch();
   const params = useParams();
- // const alert = useAlert();
+
   const status = useSelector((state) => state.product.status);
 
   const handleCart = (e) => {
@@ -37,9 +37,9 @@ export default function AdminProductDetail() {
       }
       console.log(newItem,"newitem");
       dispatch(addToCartAsyncAdmin(newItem));
-     // alert.success('Item added to Cart');
+      toast.success('Item added to Cart')
     } else {
-     // alert.error('Item Already added');
+      toast.error('Item Already added')
     }
   };
 

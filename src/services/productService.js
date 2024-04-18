@@ -41,3 +41,7 @@ export const fetchBrands = async () => {
 export const updateProduct = async (update) => {
     return Config.patch(`/products/${update?.id}`, update);
 };
+
+export const deleteProduct=async(product)=>{
+    return Config.delete(`/products/${product?.id}`, product)
+}

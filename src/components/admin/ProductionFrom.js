@@ -1,10 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  clearSelectedProduct, createProductAsync, fetchProductByIdAsync, updateProductAsync,
+import { clearSelectedProduct, createProductAsync, fetchProductByIdAsync, updateProductAsync,deleteProductAsync
 } from '../../redux/productSlice';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useAlert } from 'react-alert';
 import Modal from '../resuablecomponent/Modal';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -13,7 +11,7 @@ export default function ProductionFrom() {
 
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required('Title is required'),
+    title: Yup.string().required('Product name is required'),
     description: Yup.string().required('Description is required'),
     price: Yup.number().required('Price is required'),
     discountPercentage: Yup.number().required('DiscountPercentage is required'),
@@ -114,7 +112,6 @@ export default function ProductionFrom() {
   const selectedProduct = useSelector((state) => state.product.selectedProduct);
   console.log(params, "paramsid");
   const [openModal, setOpenModal] = useState(null);
-  // const alert = useAlert();
 
 
   const colors = [
@@ -184,8 +181,7 @@ export default function ProductionFrom() {
 
   const handleDelete = () => {
     const product = { ...selectedProduct };
-    product.deleted = true;
-    dispatch(updateProductAsync(product));
+    dispatch(deleteProductAsync(product));
   };
 
   return (
@@ -225,10 +221,11 @@ export default function ProductionFrom() {
                       id="title"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.title && formik.errors.title ? (
+                   
+                  </div>
+                  {formik.touched.title && formik.errors.title ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.title}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
 
@@ -388,10 +385,11 @@ export default function ProductionFrom() {
                       id="price"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.price && formik.errors.price ? (
+                   
+                  </div>
+                  {formik.touched.price && formik.errors.price ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.price}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
 
@@ -412,10 +410,11 @@ export default function ProductionFrom() {
                       id="discountPercentage"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.discountPercentage && formik.errors.discountPercentage ? (
+                   
+                  </div>
+                  {formik.touched.discountPercentage && formik.errors.discountPercentage ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.discountPercentage}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
 
@@ -436,10 +435,11 @@ export default function ProductionFrom() {
                       id="stock"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.stock && formik.errors.stock ? (
+                    
+                  </div>
+                  {formik.touched.stock && formik.errors.stock ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.stock}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
 
@@ -460,10 +460,11 @@ export default function ProductionFrom() {
                       id="thumbnail"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.thumbnail && formik.errors.thumbnail ? (
+                    
+                  </div>
+                  {formik.touched.thumbnail && formik.errors.thumbnail ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.thumbnail}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
 
@@ -485,10 +486,11 @@ export default function ProductionFrom() {
                       id="image1"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.image1 && formik.errors.image1 ? (
+                    
+                  </div>
+                  {formik.touched.image1 && formik.errors.image1 ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.image1}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
 
@@ -509,10 +511,11 @@ export default function ProductionFrom() {
                       id="image2"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.image2 && formik.errors.image2 ? (
+                   
+                  </div>
+                  {formik.touched.image2 && formik.errors.image2 ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.image2}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
 
@@ -533,10 +536,11 @@ export default function ProductionFrom() {
                       id="image3"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.image3 && formik.errors.image3 ? (
+                  
+                  </div>
+                  {formik.touched.image3 && formik.errors.image3 ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.image3}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
 
@@ -557,10 +561,11 @@ export default function ProductionFrom() {
                       id="highlight1"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.highlight1 && formik.errors.highlight1 ? (
+                    
+                  </div>
+                  {formik.touched.highlight1 && formik.errors.highlight1 ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.highlight1}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
               <div className="sm:col-span-6">
@@ -580,10 +585,11 @@ export default function ProductionFrom() {
                       id="highlight2"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.highlight2 && formik.errors.highlight2 ? (
+                  
+                  </div>
+                  {formik.touched.highlight2 && formik.errors.highlight2 ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.highlight2}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
               <div className="sm:col-span-6">
@@ -603,10 +609,11 @@ export default function ProductionFrom() {
                       id="highlight3"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.highlight3 && formik.errors.highlight3 ? (
+                   
+                  </div>
+                  {formik.touched.highlight3 && formik.errors.highlight3 ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.highlight3}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
               <div className="sm:col-span-6">
@@ -626,16 +633,17 @@ export default function ProductionFrom() {
                       id="highlight4"
                       className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                     />
-                    {formik.touched.highlight4 && formik.errors.highlight4 ? (
+                   
+                  </div>
+                  {formik.touched.highlight4 && formik.errors.highlight4 ? (
                       <p className="mt-2 text-sm text-red-500">{formik.errors.highlight4}</p>
                     ) : null}
-                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-b border-gray-900/10 pb-12">
+          {/* <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
               Extra{' '}
             </h2>
@@ -713,18 +721,19 @@ export default function ProductionFrom() {
                 </div>
               </fieldset>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <button
             type="button"
-            className="text-sm font-semibold leading-6 text-gray-900"
+            onClick={formik.handleReset}
+            className="text-sm rounded-md font-semibold bg-white p-2 leading-6 text-gray-900"
           >
-            Cancel
+          Reset
           </button>
 
-          {/* {selectedProduct && !selectedProduct.deleted && (
+          {selectedProduct && !selectedProduct.deleted && (
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -734,7 +743,7 @@ export default function ProductionFrom() {
           >
             Delete
           </button>
-        )} */}
+        )}
 
           <button
             type="submit"

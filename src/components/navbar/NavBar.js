@@ -43,7 +43,7 @@ export default function NavBar({ children }) {
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
                       <Link to="/dashboard" className='bg-gray-900 text-white'>
-                        Bharat's Ecommerce
+                        Bharat Store
                       </Link>
                     </div>
                     <div className="hidden md:block">

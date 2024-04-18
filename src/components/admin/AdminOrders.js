@@ -72,7 +72,7 @@ export default function AdminOrders() {
               <thead>
                 <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                   <th
-                    className="py-3 px-0 text-left cursor-pointer"
+                    className="py-3 px-0  cursor-pointer"
                     onClick={(e) =>
                       handleSort({
                         sort: 'id',
@@ -88,9 +88,9 @@ export default function AdminOrders() {
                         <ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>
                       ))}
                   </th>
-                  <th className="py-3 px-0 text-left">Items</th>
+                  <th className="py-3 px-0 ">Items</th>
                   <th
-                    className="py-3 px-0 text-left cursor-pointer"
+                    className="py-3 px-0  cursor-pointer"
                     onClick={(e) =>
                       handleSort({
                         sort: 'totalAmount',
@@ -111,7 +111,7 @@ export default function AdminOrders() {
                   <th className="py-3 px-0 text-center">Payment Method</th>
                   <th className="py-3 px-0 text-center">Payment Status</th>
                   <th
-                    className="py-3 px-0 text-left cursor-pointer"
+                    className="py-3 px-0  cursor-pointer"
                     onClick={(e) =>
                       handleSort({
                         sort: 'createdAt',
@@ -128,7 +128,7 @@ export default function AdminOrders() {
                       ))}
                   </th>
                   <th
-                    className="py-3 px-0 text-left cursor-pointer"
+                    className="py-3 px-0  cursor-pointer"
                     onClick={(e) =>
                       handleSort({
                         sort: 'updatedAt',
