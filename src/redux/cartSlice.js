@@ -77,7 +77,7 @@ export const cartSlice = createSlice({
         state.status = 'idle';
         if (action?.payload?.statusCode == 201) {
           let product = { ...action?.meta?.arg?.product };
-          let item = { ...action?.meta?.arg?.item };
+          let item = { ...action?.payload?.data };
           item.product = product;
           state.items.push(item);
         }
