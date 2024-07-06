@@ -42,7 +42,7 @@ export default function NavBar({ children }) {
                 <div className="flex h-16 items-center justify-between">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <Link to="/dashboard" className='bg-gray-900 text-white'>
+                      <Link to="/dashboard" className='bg-gray-900 font-bold text-white'>
                         Bharat Store
                       </Link>
                     </div>
