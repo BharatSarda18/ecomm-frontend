@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import PageNotFound from "./pages/404Page";
 import UserProfilePage from "./pages/UserProfilePage";
@@ -24,6 +24,11 @@ import Procted from "./components/procted/Procted";
 import ProtectedAdmin from "./components/procted/ProtectedAdmin";
 import { Toaster } from 'react-hot-toast';
 
+const ReDirectionPage=() =>{
+  if(localStorage.getItem("token")) return <Navigate to="/dashboard" replace={true}/>
+  return <Navigate to="/login" replace={true}/>
+}
+
 const router=createBrowserRouter([
 
   {path:'/dashboard',children:[
@@ -43,8 +48,11 @@ const router=createBrowserRouter([
 
   {path:'/login',element:(<LoginPage/>)},
   {path:'/signup',element:(<SignupPage/>)},
+  {path:'/',element:(<ReDirectionPage/>)},
   {path:'*',element:(<PageNotFound/>)}
 ])
+
+
 
 function App() {
 
