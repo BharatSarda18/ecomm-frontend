@@ -14,7 +14,6 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import AdminProductDetailPage from "./pages/AdminProductDetailPage";
 import AdminProductFormPage from "./pages/AdminProductFormPage";
 import AdminOrdersPage from "./pages/AdminOrdersPage.";
-import StripeCheckoutPage from "./pages/StripeCheckoutPage";
 import AdminHome from "./pages/AdminHome";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
@@ -40,7 +39,6 @@ const router=createBrowserRouter([
     {path:'order-success/:id',element:(<Procted><OrderSuccessPage/></Procted>)},
     {path:'my-orders',element:(<Procted><UserOrdersPage/></Procted>)},
     {path:'profile',element:(<Procted><UserProfilePage/></Procted>)},
-    {path:'stripe-checkout/',element:(<Procted><StripeCheckoutPage/></Procted>)}
   ]},
 
   {path:'/login',element:(<LoginPage/>)},

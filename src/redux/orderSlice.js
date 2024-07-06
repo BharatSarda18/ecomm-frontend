@@ -49,7 +49,9 @@ export const orderSlice = createSlice({
                 state.orders.push(action.payload.data);
                 state.currentOrder = action.payload.data;
             })
-            .addCase(createOrderAsync.rejected, (state) => { })
+            .addCase(createOrderAsync.rejected, (state) => {
+                state.status = 'idle';
+            })
 
         builder.addCase(updateOrderAsync.pending, (state) => {
             state.status = 'loading';
@@ -59,7 +61,9 @@ export const orderSlice = createSlice({
                 const index = state.orders.findIndex(order => order.id === action.payload.data.id)
                 state.orders[index] = action.payload.data;
             })
-            .addCase(updateOrderAsync.rejected, (state) => { })
+            .addCase(updateOrderAsync.rejected, (state) => {
+                state.status = 'idle';
+            })
 
         builder.addCase(fetchAllOrdersAsync.pending, (state) => {
             state.status = 'loading';
@@ -71,7 +75,9 @@ export const orderSlice = createSlice({
                     state.totalOrders = action?.payload?.data?.totalOrders || 0;
                 }
             })
-            .addCase(fetchAllOrdersAsync.rejected, (state) => { })
+            .addCase(fetchAllOrdersAsync.rejected, (state) => {
+                state.status = 'idle';
+             })
     }
 
 });

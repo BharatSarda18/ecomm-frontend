@@ -26,8 +26,8 @@ export default function ProductionFrom() {
     highlight2: Yup.string().required('Highlight2 is required'),
     highlight3: Yup.string().required('Highlight3 is required'),
     highlight4: Yup.string().required('highlight4 is required'),
-    sizes: Yup.array().min(1, 'At least one size is required'),
-    colors: Yup.array().min(1, 'At least one color is required')
+    sizes: Yup.array(),
+    colors: Yup.array()
   });
 
 
@@ -114,7 +114,7 @@ export default function ProductionFrom() {
   const [openModal, setOpenModal] = useState(null);
 
 
-  const colors = [
+  const colorsArray = [
     {
       name: 'White',
       class: 'bg-white',
@@ -135,7 +135,7 @@ export default function ProductionFrom() {
     },
   ];
 
-  const sizes = [
+  const sizesArray = [
     { name: 'XXS', inStock: true, id: 'xxs' },
     { name: 'XS', inStock: true, id: 'xs' },
     { name: 'S', inStock: true, id: 's' },
@@ -290,11 +290,12 @@ export default function ProductionFrom() {
                 >
                   Colors
                 </label>
-                <div className="mt-2">
-                  {colors.map((color) => (
-                    <>
+                <div className="mt-2 flex items-center flex-wrap">
+                  {colorsArray.map((color) => (
+                    <div className='flex items-center mx-1'>
+                    
                       <input
-
+                        id='colors'
                         type="checkbox"
                         onChange={(e) => {
                           const value = e.target.checked ? [...formik.values.colors, color.id] : formik.values.colors.filter((c) => c !== color.id);
@@ -302,10 +303,10 @@ export default function ProductionFrom() {
                         }}
                         onBlur={formik.handleBlur}
                         key={color.id}
-                        checked={formik.values.colors.some((obj) => obj.id === color.id)}
+                        checked={formik.values.colors.some((obj) => obj === color.id)}
                       />{' '}
-                      {color.name}
-                    </>
+                      <div className='mx-1'>{color.name}</div>
+                    </div>
                   ))}
                   {formik.touched.colors && formik.errors.colors ? (
                     <p className="mt-2 text-sm text-red-500">{formik.errors.colors}</p>
@@ -321,10 +322,11 @@ export default function ProductionFrom() {
                 >
                   Sizes
                 </label>
-                <div className="mt-2">
-                  {sizes.map((size) => (
-                    <>
+                <div className="mt-2 flex items-center flex-wrap">
+                  {sizesArray.map((size) => (
+                    <div className='flex items-center mx-1'>
                       <input
+                        id='sizes'
                         type="checkbox"
                         onChange={(e) => {
                           const value = e.target.checked ? [...formik.values.sizes, size.id] : formik.values.sizes.filter((c) => c !== size.id);
@@ -333,10 +335,10 @@ export default function ProductionFrom() {
 
                         key={size.id}
                         value={size.id}
-                        checked={ formik.values.sizes.some((obj) => obj.id === size.id)}
+                        checked={ formik.values.sizes.some((obj) => obj === size.id)}
                       />{' '}
-                      {size.name}
-                    </>
+                     <div className='mx-1'>{size.name}</div> 
+                    </div>
                   ))}
                 </div>
               </div>
@@ -350,6 +352,7 @@ export default function ProductionFrom() {
                 </label>
                 <div className="mt-2">
                   <select
+                   id='category'
                     value={formik.values.category}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}

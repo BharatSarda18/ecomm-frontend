@@ -9,7 +9,7 @@ export const fetchItemsByUserId = async () => {
 };
 
 export const updateCart = async (update) => {
-    return Config.patch(`/cart/${update?._id}`,{"quantity":update.quantity}, {
+    return Config.patch(`/cart/${update?.id}`,{"quantity":update.quantity}, {
         id: update.id
     });
 };

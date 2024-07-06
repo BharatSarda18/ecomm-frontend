@@ -82,7 +82,9 @@ export const cartSlice = createSlice({
           state.items.push(item);
         }
       })
-      .addCase(addToCartAsync.rejected, (state) => { })
+      .addCase(addToCartAsync.rejected, (state) => { 
+        state.status = 'idle';
+      })
 
 
     builder.addCase(addToCartAsyncAdmin.pending, (state) => {
@@ -95,7 +97,9 @@ export const cartSlice = createSlice({
           state.items.push(newCart);
         }
       })
-      .addCase(addToCartAsyncAdmin.rejected, (state) => { })
+      .addCase(addToCartAsyncAdmin.rejected, (state) => {
+        state.status = 'idle';
+       })
 
       .addCase(fetchItemsByUserIdAsync.pending, (state) => {
         state.status = 'loading';
@@ -126,7 +130,9 @@ export const cartSlice = createSlice({
           state.items[index] = cart;
         }
       })
-      .addCase(updateCartAsync.rejected, (state) => { })
+      .addCase(updateCartAsync.rejected, (state) => {
+        state.status = 'idle';
+       })
 
       .addCase(deleteItemFromCartAsync.pending, (state) => {
         state.status = 'loading';
@@ -139,7 +145,9 @@ export const cartSlice = createSlice({
           state.items.splice(index, 1);
         }
       })
-      .addCase(deleteItemFromCartAsync.rejected, (state) => { })
+      .addCase(deleteItemFromCartAsync.rejected, (state) => {
+        state.status = 'idle';
+       })
 
       .addCase(resetCartAsync.pending, (state) => {
         state.status = 'loading';
@@ -150,7 +158,9 @@ export const cartSlice = createSlice({
           state.items = [];
         }
       })
-      .addCase(resetCartAsync.rejected, (state) => { })
+      .addCase(resetCartAsync.rejected, (state) => { 
+        state.status = 'idle';
+      })
   }
 
 })

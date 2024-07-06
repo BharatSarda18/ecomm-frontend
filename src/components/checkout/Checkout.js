@@ -8,7 +8,7 @@ import { Link, Navigate } from 'react-router-dom';
 import {updateUserAsync} from "../../redux/userSlice";
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-
+import toast, { Toaster } from 'react-hot-toast';
 export default function Checkout() {
 
     const dispatch = useDispatch();
@@ -77,7 +77,8 @@ export default function Checkout() {
    
   
     const handleQuantity = (e, item) => {
-      dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
+      console.log(item,'item')
+      dispatch(updateCartAsync({ id: item._id, quantity: +e.target.value }));
     };
   
     const handleRemove = (e, id) => {
@@ -108,8 +109,7 @@ export default function Checkout() {
         dispatch(createOrderAsync(order));
         // need to redirect from here to a new page of order success.
       } else {
-        
-        alert('Enter Address and Payment method');
+        toast.error('Enter Address and Payment method')
       }
     };
     return (
@@ -404,7 +404,7 @@ export default function Checkout() {
                           Cash
                         </label>
                       </div>
-                      <div className="flex items-center gap-x-3">
+                      {/* <div className="flex items-center gap-x-3">
                         <input
                           id="card"
                          onChange={handlePayment}
@@ -420,7 +420,7 @@ export default function Checkout() {
                         >
                           Card Payment
                         </label>
-                      </div>
+                      </div> */}
                     </div>
                   </fieldset>
                 </div>
@@ -520,7 +520,7 @@ export default function Checkout() {
                   <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                     <p>
                       or
-                      <Link to="/">
+                      <Link to="/dashboard">
                         <button
                           type="button"
                           className="font-medium text-indigo-600 hover:text-indigo-500"
