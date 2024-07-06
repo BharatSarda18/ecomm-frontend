@@ -73,12 +73,12 @@ export default function ProductionFrom() {
       product.rating = 0;
       if (product.colors) {
         product.colors = product.colors.map((color) =>
-          colors.find((clr) => clr.id === color)
+          colorsArray.find((clr) => clr.id === color)
         );
       }
       if (product.sizes) {
         product.sizes = product.sizes.map((size) =>
-          sizes.find((sz) => sz.id === size)
+          sizesArray.find((sz) => sz.id === size)
         );
       }
 
