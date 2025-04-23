@@ -23,10 +23,11 @@ import { checkAuthAsync} from './redux/authSlice';
 import Procted from "./components/procted/Procted";
 import ProtectedAdmin from "./components/procted/ProtectedAdmin";
 import { Toaster } from 'react-hot-toast';
+import MainLayout from "./components/MainLayout";
 
 const router=createBrowserRouter([
 
-  {path:'/dashboard',children:[
+  {path:'/dashboard', element:<MainLayout/>,children:[
     {path:'',element:(<Procted> <HomePage/></Procted>)},
     {path:'admin',element:(<ProtectedAdmin><AdminHome/></ProtectedAdmin>)},
     {path:'cart',element:(<Procted><CartPage/></Procted>)},

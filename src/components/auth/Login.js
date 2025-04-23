@@ -31,7 +31,7 @@ export default function Login() {
             if (response?.payload?.statusCode == 201) {
                 //  await dispatch(checkAuth());
                 await navigate("/dashboard/");
-                window.location.reload();
+             
             } else {
                 toast.error("Wrong user or password ");
             }

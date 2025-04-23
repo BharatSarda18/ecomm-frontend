@@ -1,36 +1,47 @@
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
-import useRedirectToLogin from "../layout/useRedirectToLogin";
 
-const token = localStorage.getItem("token");
+const FetchToken = () => {
+    const token = localStorage.getItem("token");
+    return token;
+};
 
-
+// Create an axios instance
 const Config = axios.create({
-
     baseURL: process.env.REACT_APP_BASE_URL,
-    headers: {
-        Authorization: `Bearer ${token}`,
-    },
-})
+});
+
+
+// Add a request interceptor to dynamically set the token for each request this should go to dev environment
+const setAuthorizationHeader = (config) => {
+    const token = FetchToken();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+};
+
+Config.interceptors.request.use(
+    (config) => setAuthorizationHeader(config),
+    (error) => Promise.reject(error)
+);
+
+// Add response interceptors
 Config.interceptors.response.use(
-    (response) => {
-        return response;
-    },
+    (response) => response,
     (error) => {
-        console.log(error?.response?.status, typeof error?.response?.status, "error");
+        const errorMessage = error?.response?.data?.message || 'Something went wrong';
+
         if (error?.response?.status == 401) {
             localStorage.clear();
             const url = `${process.env.REACT_APP_FRONTEND_URL}login`;
-            console.log(url, 'url');
             window.location.replace(url);
         }
 
-        const updatedMessage = error?.response?.data?.message;
-        toast.error(updatedMessage)
+        toast.error(errorMessage)
         return Promise.reject(error);
     }
-
 );
+
 
 export default Config;

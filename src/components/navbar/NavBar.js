@@ -21,7 +21,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function NavBar({ children }) {
+export default function NavBar() {
 
   const items = useSelector((state) => state.cart.items);
   const userInfo = useSelector((state) => state.user.userInfo);
@@ -241,11 +241,7 @@ export default function NavBar({ children }) {
             </h1>
           </div>
         </header>
-        <main>
-          <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-            {children}
-          </div>
-        </main>
+       
       </div>}
     </>
   )

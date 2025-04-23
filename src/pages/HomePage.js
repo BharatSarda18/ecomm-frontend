@@ -6,10 +6,8 @@ import Footer from '../layout/Footer/Footer';
 export default function HomePage() {
     return (
         <>
-            <NavBar>
-               <ProductList/>
-            </NavBar>
-            <Footer/>
+           <ProductList/>
+          
         </>
     )
 };

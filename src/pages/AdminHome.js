@@ -4,8 +4,6 @@ import NavBar from '../components/navbar/NavBar';
 
 export default function AdminHome() {
   return (
-    <NavBar>
       <AdminProductList></AdminProductList>
-    </NavBar>
   )
 };

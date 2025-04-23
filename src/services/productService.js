@@ -11,24 +11,43 @@ export const createProduct = async (product) => {
 };
 
 export const fetchProductsByFilters = async (filter, sort, pagination, admin) => {
-    let queryString = '';
-    for (let key in filter) {
+    // Create a URLSearchParams object to build the query string
+    const queryParams = new URLSearchParams();
+
+    // Append filters to query params
+    Object.keys(filter).forEach((key) => {
         const categoryValues = filter[key];
-        if (categoryValues.length) {
-            queryString += `${key}=${categoryValues}&`;
+        if (categoryValues && categoryValues.length > 0) {
+            queryParams.append(key, categoryValues.join(","));
         }
-    }
-    for (let key in sort) {
-        queryString += `${key}=${sort[key]}&`;
-    }
-    for (let key in pagination) {
-        queryString += `${key}=${pagination[key]}&`;
-    }
+    });
+
+    // Append sort parameters
+    Object.keys(sort).forEach((key) => {
+        if (sort[key]) {
+            queryParams.append(key, sort[key]);
+        }
+    });
+
+    // Append pagination parameters
+    Object.keys(pagination).forEach((key) => {
+        if (pagination[key] !== undefined && pagination[key] !== null) {
+            queryParams.append(key, pagination[key]);
+        }
+    });
+
+    // Add admin parameter if present
     if (admin) {
-        queryString += `admin=true`;
+        queryParams.append("admin", "true");
     }
-    return Config.get(`/products?${queryString}`,);
+
+    // Convert the queryParams to a string
+    const queryString = queryParams.toString();
+
+    // Make the API request with the query string
+    return Config.get(`/products?${queryString}`);
 };
+
 
 export const fetchCategories = async () => {
     return Config.get(`/categories`);

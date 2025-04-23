@@ -38,7 +38,6 @@ export default function SignUp() {
             if (response?.payload?.statusCode == 201) {
                 //  await dispatch(checkAuth());
                 await navigate("/dashboard/");
-                window.location.reload();
             }
         },
     });
