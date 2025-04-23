@@ -173,8 +173,8 @@ export default function ProductionFrom() {
         highlight2: selectedProduct.highlights[1],
         highlight3: selectedProduct.highlights[2],
         highlight4: selectedProduct.highlights[3],
-        sizes: selectedProduct.sizes || [],
-        colors: selectedProduct.colors || []
+        sizes: selectedProduct.sizesArray || [],
+        colors: selectedProduct.colorsArray || []
       });
     }
   }, [selectedProduct, params.id]);
