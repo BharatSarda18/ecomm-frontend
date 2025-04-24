@@ -1,6 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { ITEMS_PER_PAGE } from "../data/constants";
-
+import { ITEMS_PER_PAGE } from "../constants/jsonData.js";
 export default function Pagination({ page, setPage, handlePage, totalItems }) {
     const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
     return (

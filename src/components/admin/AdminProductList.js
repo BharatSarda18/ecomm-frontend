@@ -6,7 +6,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon, StarIcon,} from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
 import {ChevronDownIcon, FunnelIcon, MinusIcon,PlusIcon, Squares2X2Icon} from '@heroicons/react/20/solid';
-import { ITEMS_PER_PAGE } from '../../data/constants';
+import { ITEMS_PER_PAGE } from "../../constants/jsonData.js";
 
 
 const sortOptions = [

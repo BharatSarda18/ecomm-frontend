@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {PencilIcon, EyeIcon, ArrowUpIcon, ArrowDownIcon,} from '@heroicons/react/24/outline';
-import {ITEMS_PER_PAGE} from "../../data/constants";
+import { ITEMS_PER_PAGE } from "../../constants/jsonData.js";
 import Pagination from "../../layout/Pagination"; 
 import { updateOrderAsync,fetchAllOrdersAsync } from '../../redux/orderSlice';
 

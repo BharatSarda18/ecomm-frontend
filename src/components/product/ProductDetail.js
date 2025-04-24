@@ -7,10 +7,7 @@ import { addToCartAsync } from "../../redux/cartSlice";
 import { fetchProductByIdAsync } from "../../redux/productSlice";
 import { Grid } from 'react-loader-spinner';
 import toast from 'react-hot-toast';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '../../helperFunctions';
 
 export default function ProductDetail() {
 
@@ -72,18 +69,7 @@ export default function ProductDetail() {
 
   return (
     <div className="bg-white">
-      {status === 'loading' ? (
-        <Grid
-          height="80"
-          width="80"
-          color="rgb(79, 70, 229) "
-          ariaLabel="grid-loading"
-          radius="12.5"
-          wrapperStyle={{}}
-          wrapperClass=""
-          visible={true}
-        />
-      ) : null}
+      {status === 'loading' ? ( <Grid height="80" width="80" color="rgb(79, 70, 229)" ariaLabel="grid-loading" radius="12.5" wrapperStyle={{}} wrapperClass="" visible={true}/>) : null}
       {product && (
         <div className="pt-6">
           <nav aria-label="Breadcrumb">
@@ -92,31 +78,20 @@ export default function ProductDetail() {
                 product.breadcrumbs.map((breadcrumb) => (
                   <li key={breadcrumb.id}>
                     <div className="flex items-center">
-                      <a
-                        href={breadcrumb.href}
-                        className="mr-2 text-sm font-medium text-gray-900"
-                      >
+
+                      <a href={breadcrumb.href} className="mr-2 text-sm font-medium text-gray-900">
                         {breadcrumb.name}
                       </a>
-                      <svg
-                        width={16}
-                        height={20}
-                        viewBox="0 0 16 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-4 text-gray-300"
-                      >
+
+                      <svg width={16} height={20} viewBox="0 0 16 20" fill="currentColor" aria-hidden="true" className="h-5 w-4 text-gray-300">
                         <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                       </svg>
+
                     </div>
                   </li>
                 ))}
               <li className="text-sm">
-                <a
-                  href={product.href}
-                  aria-current="page"
-                  className="font-medium text-gray-500 hover:text-gray-600"
-                >
+                <a href={product.href} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
                   {product.title}
                 </a>
               </li>
@@ -126,34 +101,18 @@ export default function ProductDetail() {
 
           <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
             <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
-              <img
-                src={product.images[0]}
-                alt={product.title}
-                className="h-full w-full object-cover object-center"
-              />
+              <img src={product.images[0]} alt={product.title} className="h-full w-full object-cover object-center"/>
             </div>
             <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
               <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                <img
-                  src={product.images[1]}
-                  alt={product.title}
-                  className="h-full w-full object-cover object-center"
-                />
+                <img src={product.images[1]} alt={product.title} className="h-full w-full object-cover object-center"/>
               </div>
               <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
-                <img
-                  src={product.images[2]}
-                  alt={product.title}
-                  className="h-full w-full object-cover object-center"
-                />
+                <img src={product.images[2]} alt={product.title} className="h-full w-full object-cover object-center"/>
               </div>
             </div>
             <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
-              <img
-                src={product.images[3]}
-                alt={product.title}
-                className="h-full w-full object-cover object-center"
-              />
+              <img src={product.images[3]} alt={product.title} className="h-full w-full object-cover object-center"/>
             </div>
           </div>
 
@@ -169,10 +128,10 @@ export default function ProductDetail() {
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
               <p className="text-xl line-through tracking-tight text-gray-900">
-                ${product.price}
+              ₹{product.price}
               </p>
               {(discountPrice) && <p className="text-3xl tracking-tight text-gray-900">
-                ${discountPrice}
+                ₹{discountPrice}
               </p>}
 
 
@@ -181,16 +140,7 @@ export default function ProductDetail() {
                 <div className="flex items-center">
                   <div className="flex items-center">
                     {[0, 1, 2, 3, 4].map((rating) => (
-                      <StarIcon
-                        key={rating}
-                        className={classNames(
-                          product.rating > rating
-                            ? 'text-gray-900'
-                            : 'text-gray-200',
-                          'h-5 w-5 flex-shrink-0'
-                        )}
-                        aria-hidden="true"
-                      />
+                      <StarIcon key={rating} className={`h-5 w-5 flex-shrink-0 ${product.rating > rating? 'text-gray-900': 'text-gray-200'}`} aria-hidden="true"/>
                     ))}
                   </div>
                   <p className="sr-only">{product.rating} out of 5 stars</p>
@@ -203,23 +153,15 @@ export default function ProductDetail() {
                   <div>
                     <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
-                    <RadioGroup
-                      value={selectedColor}
-                      onChange={setSelectedColor}
-                      className="mt-4"
-                    >
+                    <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-4">
                       <RadioGroup.Label className="sr-only">
                         Choose a color
                       </RadioGroup.Label>
                       <div className="flex items-center space-x-3">
-                      {console.log(product.colors,'products')}
                         {product?.colors?.map((color) => (
-                          
                           <RadioGroup.Option
-                         
                             key={color.name}
                             value={color}
-                            
                             className={({ active, checked }) =>
                               classNames(
                                 color.selectedClass,
@@ -254,10 +196,7 @@ export default function ProductDetail() {
                       <h3 className="text-sm font-medium text-gray-900">
                         Size
                       </h3>
-                      <a
-                        href="#"
-                        className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                      >
+                      <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                         Size guide
                       </a>
                     </div>
