@@ -8,18 +8,10 @@ import Modal from '../resuablecomponent/Modal';
 
 export default function Cart() {
 
-  const items = useSelector((state) => state.cart.items);
-  const status = useSelector((state) => state.cart.status);
-  const cartLoaded = useSelector((state) => state.cart.cartLoaded);
-
+  const {items,status,cartLoaded} = useSelector((state) => state.cart);
   const [openModal, setOpenModal] = useState(null);
-
   const dispatch = useDispatch();
 
-  // const totalAmount = items.reduce(
-  //   (amount, item) => item.product.discountPrice * item.quantity + amount,
-  //   0
-  // );
 
   let totalAmount = items.reduce((amount, item) => {
     // Check if discount price exists, otherwise calculate discounted price
@@ -34,9 +26,6 @@ export default function Cart() {
 
   totalAmount=Number(totalAmount.toFixed(2));
 
-
-  
-
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
 
   const handleQuantity = (e, item) => {
@@ -45,10 +34,7 @@ export default function Cart() {
     dispatch(updateCartAsync(newItem));
   };
 
-  const handleRemove = (e, id) => {
-    console.log(id, "=====<")
-    dispatch(deleteItemFromCartAsync(id));
-  };
+  const handleRemove = (e, id) =>  dispatch(deleteItemFromCartAsync(id));
 
   return (
     <>
@@ -61,7 +47,7 @@ export default function Cart() {
               Cart
             </h1>
             <div className="flow-root">
-              {status === 'loading' ? (
+              {status === 'loading' && (
                 <Grid
                   height="80"
                   width="80"
@@ -72,7 +58,7 @@ export default function Cart() {
                   wrapperClass=""
                   visible={true}
                 />
-              ) : null}
+              )}
               <ul className="-my-6 divide-y divide-gray-200">
                 {items.map((item) => (
                   <li key={item.id} className="flex py-6">
@@ -91,9 +77,9 @@ export default function Cart() {
                             <a href={item.product.id}>{item.product.title}</a>
                           </h3>
                           {item.product.discountPrice ?
-                            <p className="ml-4">${item.product.discountPrice}</p> :
+                            <p className="ml-4">₹{item.product.discountPrice}</p> :
                             <p className="ml-4">
-                              ${item.product.price - (item.product.price * item.product.discountPercentage / 100)}{" "}
+                              ₹{item.product.price - (item.product.price * item.product.discountPercentage / 100)}{" "}
                             </p>
                           }
                         </div>
@@ -150,7 +136,7 @@ export default function Cart() {
           <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
             <div className="flex justify-between my-2 text-base font-medium text-gray-900">
               <p>Subtotal</p>
-              <p>$ {totalAmount}</p>
+              <p>₹{totalAmount}</p>
             </div>
             <div className="flex justify-between my-2 text-base font-medium text-gray-900">
               <p>Total Items in Cart</p>
