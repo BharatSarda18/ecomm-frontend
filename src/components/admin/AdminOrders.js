@@ -55,7 +55,7 @@ export default function AdminOrders() {
     <div className="overflow-x-auto">
       <div className="bg-gray-100 flex items-center justify-center font-sans overflow-hidden">
         <div className="w-full">
-          <div className="bg-white shadow-md rounded my-6">
+          <div className="bg-white shadow-md rounded p-3 sm:p-0">
             <table className="w-full block overflow-x-auto">
 
               <thead>
