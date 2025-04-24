@@ -8,6 +8,6 @@ export const updateOrder = async (order) => {
     return Config.patch(`/order/${order?.id}`,order);
 };
 
-export const fetchAllOrders = async (sort, pagination) => {
+export const fetchAllOrders = async (pagination) => {
     return Config.get(`/order?`);
 };
