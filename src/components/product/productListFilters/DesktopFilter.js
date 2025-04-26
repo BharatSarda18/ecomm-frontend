@@ -1,6 +1,8 @@
 import { Disclosure } from '@headlessui/react';
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid';
-export default function DesktopFilter({ handleFilter, filters }) {
+export default function DesktopFilter({ handleFilter, filters,filter }) {
+
+  console.log({ filter });
     return (
       <form className="hidden lg:block">
         {filters.map((section) => (
@@ -31,23 +33,21 @@ export default function DesktopFilter({ handleFilter, filters }) {
                     {section?.options?.map((option, optionIdx) => (
   
                       <div key={option.value} className="flex items-center">
-                        {console.log(section.options, "sectionbharat")}
                         <input
                           id={`filter-${section.id}-${optionIdx}`}
                           name={`${section.id}[]`}
                           defaultValue={option.value}
                           type="checkbox"
-                          defaultChecked={option.checked}
+                          checked={filter[section.id]?.includes(option.value)}
                           onChange={(e) => handleFilter(e, section, option)}
-                          className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          className="h-4 w-4 rounded border-gray-300 cursor-pointer text-indigo-600 focus:ring-indigo-500"
                         />
                         <label
                           htmlFor={`filter-${section.id}-${optionIdx}`}
-                          className="ml-3 text-sm text-gray-600"
+                          className="ml-3 text-sm text-gray-600 cursor-pointer"
                         >
                           {option.label}
                         </label>
-                        {console.log(option.label, "{option.label}")}
                       </div>
                     ))}
                   </div>

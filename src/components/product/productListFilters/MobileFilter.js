@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Dialog, Disclosure, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid';
-export default function MobileFilter({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter, filters }) {
+export default function MobileFilter({ mobileFiltersOpen, setMobileFiltersOpen, handleFilter, filters,filter }) {
     return (
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
             <Dialog
@@ -40,7 +40,7 @@ export default function MobileFilter({ mobileFiltersOpen, setMobileFiltersOpen, 
                                     className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
                                     onClick={() => setMobileFiltersOpen(false)}
                                 >
-                                    <span className="sr-only">Close menu</span>
+                                   
                                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                                 </button>
                             </div>
@@ -80,22 +80,22 @@ export default function MobileFilter({ mobileFiltersOpen, setMobileFiltersOpen, 
                                                         {section.options.map((option, optionIdx) => (
                                                             <div
                                                                 key={option.value}
-                                                                className="flex items-center"
+                                                                className="flex items-center cursor-pointer"
                                                             >
                                                                 <input
                                                                     id={`filter-mobile-${section.id}-${optionIdx}`}
                                                                     name={`${section.id}[]`}
                                                                     defaultValue={option.value}
                                                                     type="checkbox"
-                                                                    defaultChecked={option.checked}
+                                                                    checked={filter[section.id]?.includes(option.value)}
                                                                     onChange={(e) =>
                                                                         handleFilter(e, section, option)
                                                                     }
-                                                                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                                                    className="h-4 w-4 rounded cursor-pointer border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                 />
                                                                 <label
                                                                     htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                                                    className="ml-3 min-w-0 flex-1 text-gray-500"
+                                                                    className="ml-3 cursor-pointer min-w-0 flex-1 text-gray-500"
                                                                 >
                                                                     {option.label}
                                                                 </label>

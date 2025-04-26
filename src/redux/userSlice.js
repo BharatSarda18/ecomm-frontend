@@ -36,7 +36,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState: {
     status: 'idle',
-    userInfo: null, 
+    userInfo: {}, 
   },
   reducers: {
     setUserInfo:(state,action)=>{
@@ -50,8 +50,12 @@ export const userSlice = createSlice({
       })
       .addCase(fetchLoggedInUserOrderAsync.fulfilled, (state, action) => {
         state.status = 'idle';
+        console.log(action,state,
+          "kjubh"
+        );
         if(action?.payload?.statusCode==200){
-          state.userInfo.orders = action?.payload?.data||[];
+          
+          state.userInfo.orders = action?.payload?.data;
         }
       })
       .addCase(updateUserAsync.pending, (state) => {

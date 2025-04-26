@@ -16,7 +16,6 @@ export default function ProductList() {
   const {status,brands,categories,totalItems,products} = useSelector((state) => state.product);
 
   const filters = productFilters(brands,categories);
-
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState({});
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -63,7 +62,7 @@ export default function ProductList() {
   return (
     <div className="bg-white">
       <div>
-        <MobileFilter handleFilter={handleFilter} mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen} filters={filters}/>
+        <MobileFilter filter={filter} handleFilter={handleFilter} mobileFiltersOpen={mobileFiltersOpen} setMobileFiltersOpen={setMobileFiltersOpen} filters={filters}/>
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
@@ -125,10 +124,10 @@ export default function ProductList() {
             </h2>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              <DesktopFilter handleFilter={handleFilter} filters={filters}/>
+              <DesktopFilter filter={filter}  handleFilter={handleFilter} filters={filters} />
               {/* Product grid */}
               <div className="lg:col-span-3">
-                <ProductGrid products={products} status={status}></ProductGrid>
+                <ProductGrid products={products} status={status}/>
               </div>
               {/* Product grid end */}
             </div>

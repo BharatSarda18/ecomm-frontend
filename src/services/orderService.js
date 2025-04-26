@@ -9,5 +9,12 @@ export const updateOrder = async (order) => {
 };
 
 export const fetchAllOrders = async (pagination) => {
-    return Config.get(`/order?`);
+    const queryParams = new URLSearchParams();
+    Object.keys(pagination).forEach((key) => {
+        if (pagination[key] !== undefined && pagination[key] !== null) {
+            queryParams.append(key, pagination[key]);
+        }
+    });
+    const queryString = queryParams.toString();
+    return Config.get(`/order?${queryString}`);
 };
