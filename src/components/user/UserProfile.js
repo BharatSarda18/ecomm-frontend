@@ -519,13 +519,13 @@ export default function UserProfile() {
                   </p>
                 </div>
                 <div className="space-x-2 sm:flex sm:flex-col sm:items-end">
-                  <button
+                  {/* <button
                     onClick={(e) => handleEditForm(index)}
                     type="button"
                     className="font-medium text-indigo-600 hover:text-indigo-500"
                   >
                     Edit
-                  </button>
+                  </button> */}
                   <button
                     onClick={(e) => handleRemove(e, index)}
                     type="button"

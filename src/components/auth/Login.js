@@ -1,10 +1,13 @@
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUserAsync } from '../../redux/authSlice';
+import { checkAuthAsync, loginUserAsync } from '../../redux/authSlice';
 import toast from 'react-hot-toast';
 import eccomLogo from "../../images/Yellow_E-commerce_Shop_Bag_Store_Logo.jpg";
 import { logininitialValues, loginvalidationSchema } from '../../constants/formconstants/login';
+import { fetchItemsByUserIdAsync } from '../../redux/cartSlice';
+import { fetchLoggedInUserAsync } from '../../redux/userSlice';
+import { useEffect } from 'react';
 
 export default function Login() {
 
@@ -18,12 +21,20 @@ export default function Login() {
         onSubmit: async (values) => {
             const response = await dispatch(loginUserAsync(values));
             if (response?.payload?.statusCode === 201) {
+                dispatch(fetchItemsByUserIdAsync());
+                // we can get req.user by token on backend so no need to give in front-end
+                dispatch(fetchLoggedInUserAsync());
+                dispatch(checkAuthAsync());
                 await navigate("/dashboard/");
             } else {
                 toast.error("Wrong user or password ");
             }
         }
     });
+
+    useEffect(() => {
+        localStorage.clear();
+    }, []);
 
     return (
         <div className="p-6">

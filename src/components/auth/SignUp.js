@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { createUserAsync } from '../../redux/authSlice';
+import { checkAuthAsync, createUserAsync } from '../../redux/authSlice';
 import eccomLogo from "../../images/Yellow_E-commerce_Shop_Bag_Store_Logo.jpg";
 import { signUpinitialValues, signUpValidationSchema } from '../../constants/formconstants/login';
+import { fetchItemsByUserIdAsync } from '../../redux/cartSlice';
+import { fetchLoggedInUserAsync } from '../../redux/userSlice';
 
 export default function SignUp() {
 
@@ -19,6 +21,10 @@ export default function SignUp() {
             const response = await dispatch(createUserAsync({ email: values.email, password: values.password, role: 'user' }));
 
             if (response?.payload?.statusCode === 201) {
+                dispatch(fetchItemsByUserIdAsync());
+                // we can get req.user by token on backend so no need to give in front-end
+                dispatch(fetchLoggedInUserAsync());
+                dispatch(checkAuthAsync());
                 await navigate("/dashboard/");
             }
         },

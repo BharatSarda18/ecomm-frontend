@@ -1,14 +1,14 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { clearSelectedProduct, createProductAsync, fetchProductByIdAsync, updateProductAsync,deleteProductAsync
 } from '../../redux/productSlice';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Modal from '../resuablecomponent/Modal';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
 export default function ProductionFrom() {
-
+  const navigate = useNavigate();
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Product name is required'),
@@ -179,9 +179,11 @@ export default function ProductionFrom() {
     }
   }, [selectedProduct, params.id]);
 
-  const handleDelete = () => {
+  const handleDelete = async() => {
     const product = { ...selectedProduct };
-    dispatch(deleteProductAsync(product));
+   await dispatch(deleteProductAsync(product));
+   navigate("/dashboard/");
+
   };
 
   return (
