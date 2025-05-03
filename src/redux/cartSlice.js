@@ -25,14 +25,7 @@ export const addToCartAsyncAdmin = createAsyncThunk(
   }
 );
 
-export const fetchItemsByUserIdAsync = createAsyncThunk(
-  'cart/fetchItemsByUserId',
-  async () => {
-    const response = await fetchItemsByUserId();
-    // The value we return becomes the `fulfilled` action payload
-    return response.data;
-  }
-);
+
 
 export const updateCartAsync = createAsyncThunk(
   'cart/updateCart',
@@ -68,7 +61,11 @@ export const cartSlice = createSlice({
     items: [],
     cartLoaded: false
   },
-  reducers: {},
+  reducers: {
+    updateCartState: (state, action) => {
+      state.items = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(addToCartAsync.pending, (state) => {
       state.status = 'loading';
@@ -101,21 +98,7 @@ export const cartSlice = createSlice({
         state.status = 'idle';
        })
 
-      .addCase(fetchItemsByUserIdAsync.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchItemsByUserIdAsync.fulfilled, (state, action) => {
-        state.status = 'idle';
-        state.cartLoaded = true;
-        let cart = action?.payload?.data || [];
-        if (action?.payload?.statusCode == 200) {
-          state.items = cart;
-        }
-      })
-      .addCase(fetchItemsByUserIdAsync.rejected, (state) => {
-        state.status = 'idle';
-        state.cartLoaded = true;
-      })
+    
 
       .addCase(updateCartAsync.pending, (state) => {
         state.status = 'loading';
@@ -165,4 +148,5 @@ export const cartSlice = createSlice({
 
 })
 
+export const {updateCartState}=cartSlice.actions;
 export default cartSlice.reducer;

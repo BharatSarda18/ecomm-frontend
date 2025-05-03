@@ -17,13 +17,14 @@ import AdminOrdersPage from "./pages/AdminOrdersPage.";
 import AdminHome from "./pages/AdminHome";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchLoggedInUserAsync } from './redux/userSlice';
-import { fetchItemsByUserIdAsync } from './redux/cartSlice';
-import { checkAuthAsync} from './redux/authSlice';
+import {  setUserInfo } from './redux/userSlice';
+import {  updateCartState } from './redux/cartSlice';
 import Procted from "./components/procted/Procted";
 import ProtectedAdmin from "./components/procted/ProtectedAdmin";
 import { Toaster } from 'react-hot-toast';
 import MainLayout from "./components/MainLayout";
+import { getAxiosBaseService, postAxiosBaseService } from "./services/baseService";
+import { URLS } from "./constants/urls";
 
 const router=createBrowserRouter([
 
@@ -56,15 +57,22 @@ function App() {
 
   useEffect(() => {
 
-    // dispatch(checkAuthAsync());
-  }, [dispatch]);
+    const fetchUserDetails=async()=>{
+      try {
+        const cartData= await postAxiosBaseService(URLS.FETCH_ALL_ORDERS);
+        dispatch(updateCartState(cartData?.data?.data));
 
-  useEffect(() => {
+        const UserDetails= await getAxiosBaseService(URLS.FETCH_USER_DETAIL);
+        dispatch(setUserInfo(UserDetails?.data?.data));
+
+        
+       } catch (error) {
+         
+       }
+
+    }
     if (user) {
-      dispatch(fetchItemsByUserIdAsync());
-      // we can get req.user by token on backend so no need to give in front-end
-      dispatch(fetchLoggedInUserAsync());
-      dispatch(checkAuthAsync());
+      fetchUserDetails();
     }
   }, [dispatch, user]);
   return (

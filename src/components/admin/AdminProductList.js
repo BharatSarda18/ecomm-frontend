@@ -1,12 +1,14 @@
 import React, { useState, Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {fetchBrandsAsync,fetchCategoriesAsync,fetchProductsByFiltersAsync} from '../../redux/productSlice';
+import { updateBrands, updateCategories, updateProducts, updateTotalItems} from '../../redux/productSlice';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { ChevronLeftIcon, ChevronRightIcon, StarIcon,} from '@heroicons/react/20/solid';
 import { Link } from 'react-router-dom';
 import {ChevronDownIcon, FunnelIcon, MinusIcon,PlusIcon, Squares2X2Icon} from '@heroicons/react/20/solid';
 import { ITEMS_PER_PAGE } from "../../constants/jsonData.js";
+import { getAxiosBaseService } from '../../services/baseService.js';
+import { URLS } from '../../constants/urls.js';
 
 
 const sortOptions = [
@@ -74,8 +76,25 @@ export default function AdminProductList() {
   };
 
   useEffect(() => {
-    const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
-    dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination, admin:true }));
+    const getProducts=async()=>{
+      try {
+
+        const queryParams = {
+          ...(filter?.category?.length && { category: filter.category.join(",") }),
+          ...(filter?.brand?.length && { brand: filter.brand.join(",") }),
+          ...sort,
+          _page: page,
+          _limit: ITEMS_PER_PAGE,
+          admin:true
+        };
+        
+        const productResponse = await getAxiosBaseService(URLS.FETCH_PRODUCTS, queryParams);
+        
+        dispatch(updateProducts(productResponse.data?.data?.result||[]));
+        dispatch(updateTotalItems(productResponse.data?.data?.totalCount||0));
+      } catch (error) { }
+    }
+    getProducts();
   }, [dispatch, filter, sort, page]);
 
   useEffect(() => {
@@ -83,9 +102,20 @@ export default function AdminProductList() {
   }, [totalItems, sort]);
 
   useEffect(() => {
-    dispatch(fetchBrandsAsync());
-    dispatch(fetchCategoriesAsync());
+    const fetchBrands=async()=>{
+      try {
+       const brancdResponse=await getAxiosBaseService(URLS.FETCH_BRANDS);
+        dispatch(updateBrands(brancdResponse.data.data));
+      } catch (error) {}
+    }
+    const fetchCategories=async()=>{
+     const categoriesResponse=await getAxiosBaseService(URLS.FETCH_CATEGORIES);
+      dispatch(updateCategories(categoriesResponse.data.data));
+    }
+    fetchBrands();
+    fetchCategories();
   }, []);
+
 
   return (
     <div className="bg-white">

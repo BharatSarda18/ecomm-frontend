@@ -3,11 +3,13 @@ import { StarIcon } from '@heroicons/react/20/solid';
 import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { addToCartAsync } from "../../redux/cartSlice";
+import {  updateCartState } from "../../redux/cartSlice";
 import { fetchProductByIdAsync } from "../../redux/productSlice";
 import { Grid } from 'react-loader-spinner';
 import toast from 'react-hot-toast';
 import { classNames } from '../../helperFunctions';
+import { postAxiosBaseService } from '../../services/baseService';
+import { URLS } from '../../constants/urls';
 
 export default function ProductDetail() {
 
@@ -18,6 +20,7 @@ export default function ProductDetail() {
   const dispatch = useDispatch();
   const params = useParams();
   const status = useSelector((state) => state.product.status);
+
 
   let discountPrice = product?.discountPrice;
 
@@ -37,6 +40,8 @@ export default function ProductDetail() {
       return;
     }
 
+    console.log({ items, product });
+
     if (items.findIndex((item) => item.product.id === product.id) < 0) {
 
       const newItem = {
@@ -49,8 +54,14 @@ export default function ProductDetail() {
       if (selectedSize) {
         newItem.size = selectedSize;
       }
-      await dispatch(addToCartAsync({ item: newItem, product }));
-      toast.success("item added to cart");
+      try {
+        const addToCartResponse=await postAxiosBaseService(URLS.ADD_TO_CART,  newItem );
+        dispatch(updateCartState([...items, {...addToCartResponse.data.data,"product":product}]))
+        toast.success("item added to cart");
+      } catch (error) {
+        
+      }
+      
 
     } else {
       toast.error('Item Already added');

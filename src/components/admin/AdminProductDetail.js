@@ -7,6 +7,7 @@ import { StarIcon } from '@heroicons/react/20/solid';
 import {fetchProductByIdAsync} from '../../redux/productSlice';
 import { addToCartAsyncAdmin } from '../../redux/cartSlice';
 import toast from 'react-hot-toast';
+import { postAxiosBaseService } from '../../services/baseService';
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -21,10 +22,11 @@ export default function AdminProductDetail() {
 
   const status = useSelector((state) => state.product.status);
 
-  const handleCart = (e) => {
+  const handleCart = async(e) => {
     e.preventDefault();
+    console.log({ items, product });
     if (items.findIndex((item) => item.product.id === product.id) < 0) {
-      console.log({ items, product });
+      
       const newItem = {
         product: product.id,
         quantity: 1,
@@ -36,7 +38,9 @@ export default function AdminProductDetail() {
         newItem.size = selectedSize;
       }
       console.log(newItem,"newitem");
-      dispatch(addToCartAsyncAdmin(newItem));
+      const addToCartResponse=await postAxiosBaseService(URLS.ADD_TO_CART,  newItem );
+      dispatch(updateCartState([...items, {...addToCartResponse.data.data,"product":product}]))
+     // dispatch(addToCartAsyncAdmin(newItem));
       toast.success('Item added to Cart')
     } else {
       toast.error('Item Already added')

@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { createUserAsync } from '../../redux/authSlice';
 import eccomLogo from "../../images/Yellow_E-commerce_Shop_Bag_Store_Logo.jpg";
 import { signUpinitialValues, signUpValidationSchema } from '../../constants/formconstants/login';
+import { URLS } from '../../constants/urls';
+import { postAxiosBaseService } from '../../services/baseService';
+import { setUserInfo } from '../../redux/userSlice';
 
 export default function SignUp() {
 
@@ -16,11 +18,14 @@ export default function SignUp() {
         initialValues: signUpinitialValues,
         validationSchema: signUpValidationSchema,
         onSubmit: async (values) => {
-            const response = await dispatch(createUserAsync({ email: values.email, password: values.password, role: 'user' }));
 
-            if (response?.payload?.statusCode === 201) {
+            try {
+                const response = await postAxiosBaseService(URLS.SIGNUP, { email: values.email, password: values.password, role: 'user' });
+                const token = response?.data?.data.token;
+                dispatch(setUserInfo(response?.data?.data.userWithoutPass));
+                localStorage.setItem('token', token);
                 await navigate("/dashboard/");
-            }
+            } catch (error) { }
         },
     });
 

@@ -20,6 +20,5 @@ export const deleteItemFromCart = async (itemId) => {
 
 export const resetCart = async () => {
     return Config.get(`/cart/reset`);
-
 };
 

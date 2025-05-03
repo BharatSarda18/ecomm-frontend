@@ -3,12 +3,14 @@ import { Menu, Transition } from '@headlessui/react';
 import { FunnelIcon } from '@heroicons/react/20/solid';
 import { useSelector, useDispatch } from 'react-redux';
 import Pagination from '../../layout/Pagination';
-import { fetchProductsByFiltersAsync, fetchBrandsAsync, fetchCategoriesAsync } from '../../redux/productSlice';
+import {  updateBrands, updateCategories, updateProducts, updateTotalItems } from '../../redux/productSlice';
 import { prodctSortOptions, productFilters,ITEMS_PER_PAGE } from "../../constants/jsonData.js";
 import MobileFilter from "./productListFilters/MobileFilter.js";
 import DesktopFilter from "./productListFilters/DesktopFilter.js";
 import ChevronDownIcon from '@heroicons/react/20/solid/ChevronDownIcon';
 import ProductGrid from "./productGrid/ProductGrid.js";
+import { getAxiosBaseService } from '../../services/baseService.js';
+import { URLS } from '../../constants/urls.js';
 
 export default function ProductList() {
   const dispatch = useDispatch();
@@ -46,8 +48,26 @@ export default function ProductList() {
   const handlePage = (page) => setPage(page);
 
   useEffect(() => {
-    const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
-    dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
+
+    const getProducts=async()=>{
+      try {
+
+        const queryParams = {
+          ...(filter?.category?.length && { category: filter.category.join(",") }),
+          ...(filter?.brand?.length && { brand: filter.brand.join(",") }),
+          ...sort,
+          _page: page,
+          _limit: ITEMS_PER_PAGE,
+        };
+        
+        const productResponse = await getAxiosBaseService(URLS.FETCH_PRODUCTS, queryParams);
+        
+        dispatch(updateProducts(productResponse.data?.data?.result||[]));
+        dispatch(updateTotalItems(productResponse.data?.data?.totalCount||0));
+      } catch (error) { }
+    }
+    getProducts();
+
   }, [dispatch, filter, sort, page]);
 
   useEffect(() => {
@@ -55,8 +75,18 @@ export default function ProductList() {
   }, [totalItems, sort]);
 
   useEffect(() => {
-    dispatch(fetchBrandsAsync());
-    dispatch(fetchCategoriesAsync());
+    const fetchBrands=async()=>{
+      try {
+       const brancdResponse=await getAxiosBaseService(URLS.FETCH_BRANDS);
+        dispatch(updateBrands(brancdResponse.data.data));
+      } catch (error) {}
+    }
+    const fetchCategories=async()=>{
+     const categoriesResponse=await getAxiosBaseService(URLS.FETCH_CATEGORIES);
+      dispatch(updateCategories(categoriesResponse.data.data));
+    }
+    fetchBrands();
+    fetchCategories();
   }, []);
 
   return (

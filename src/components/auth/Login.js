@@ -1,10 +1,12 @@
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUserAsync } from '../../redux/authSlice';
 import toast from 'react-hot-toast';
 import eccomLogo from "../../images/Yellow_E-commerce_Shop_Bag_Store_Logo.jpg";
 import { logininitialValues, loginvalidationSchema } from '../../constants/formconstants/login';
+import { URLS } from '../../constants/urls';
+import { postAxiosBaseService } from '../../services/baseService';
+import { setUserInfo } from '../../redux/userSlice';
 
 export default function Login() {
 
@@ -16,12 +18,20 @@ export default function Login() {
         initialValues: logininitialValues,
         validationSchema: loginvalidationSchema,
         onSubmit: async (values) => {
-            const response = await dispatch(loginUserAsync(values));
-            if (response?.payload?.statusCode === 201) {
-                await navigate("/dashboard/");
-            } else {
-                toast.error("Wrong user or password ");
-            }
+
+            try {
+                const response = await postAxiosBaseService(URLS.LOGIN, values);
+               
+                if ( response.data?.statusCode === 201) {
+                    const token = response?.data?.data.token;
+                    dispatch(setUserInfo(response?.data?.data.userWithoutPass));
+                    localStorage.setItem('token', token);
+                    await navigate("/dashboard/");
+
+                } else {
+                    toast.error("Wrong user or password ");
+                }
+            } catch (error) {}
         }
     });
 
@@ -43,7 +53,7 @@ export default function Login() {
                                         <input id="email" name="email" type="email" placeholder='Enter your email' value={formik.values.email} onChange={formik.handleChange} autoComplete="off" required
                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                         />
-                                        {formik.touched.email && formik.errors.email&& ( <p className="mt-1 text-sm text-red-500">{formik.errors.email}</p>)}
+                                        {formik.touched.email && formik.errors.email && (<p className="mt-1 text-sm text-red-500">{formik.errors.email}</p>)}
                                     </div>
                                 </>
 
@@ -52,9 +62,9 @@ export default function Login() {
                                         <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900"> Password </label>
                                     </div>
                                     <div className="!mt-2">
-                                        <input id="password" name="password" type="password"  autoComplete="off" placeholder='Enter your password' value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} required
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
-                                        {formik.touched.password && formik.errors.password && ( <p className="mt-1 text-sm text-red-500">{formik.errors.password}</p>)}
+                                        <input id="password" name="password" type="password" autoComplete="off" placeholder='Enter your password' value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} required
+                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                                        {formik.touched.password && formik.errors.password && (<p className="mt-1 text-sm text-red-500">{formik.errors.password}</p>)}
                                     </div>
                                 </>
 
