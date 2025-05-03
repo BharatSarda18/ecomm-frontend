@@ -99,7 +99,7 @@ export default function AdminOrders() {
                         </div>
                         <div>{order.selectedAddress.street},</div>
                         <div>{order.selectedAddress.city}{", "}{order.selectedAddress.state}{", "}{order.selectedAddress.pinCode} </div>
-                        <div>{order.selectedAddress.phone}, </div>
+                        <div>{order.selectedAddress.phone} </div>
                       </div>
                     </td>
 
